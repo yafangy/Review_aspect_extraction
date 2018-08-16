@@ -23,7 +23,9 @@ The third embedding is introduced here and added to the original model.
 
 ## How to use the code
 
-Required Python modules: numpy, PyTorch (with or without CUDA), Keras, nltk, etc.  
+Required Python modules: numpy, PyTorch (with or without CUDA), Keras, nltk, etc.
+
+You can skip step 5/6/7 if you wish to use pre-trained model to evaluate review text files. 
 
 #### Step 1: 
 Download general embeddings (GloVe: http://nlp.stanford.edu/data/glove.840B.300d.zip ). Rename it as "gen.vec" and save it in folder: data/embedding/
@@ -56,14 +58,16 @@ This is for embedding out-of-vocabulary words (words not in domain-specific embe
 Download Stanford Log-linear Part-Of-Speech Tagger from [The Stanford Natural Language Processing Group](https://nlp.stanford.edu/software/tagger.shtml) to folder and rename it as: stanford-postagger-full/
 
 ### Step 5:
+You can skip this step. The dataset is included.
+
 Download official datasets to folder: data/official_data/
 
 The data is from SemEval 2016 Restaurant (http://alt.qcri.org/semeval2016/task5/).
 
 I assume the name is as follows:
-ABSA16_Restaurants_Train_SB1_v2.xml (for training)
-EN_REST_SB1_TEST_A.xml (for test)
-EN_REST_SB1_TEST_gold.xml (given best test result)
+- ABSA16_Restaurants_Train_SB1_v2.xml (for training)
+- EN_REST_SB1_TEST_A.xml (for test)
+- EN_REST_SB1_TEST_gold.xml (given best test result)
 
 ### Step 6:
 The original dataset from SemEval 2016 Restaurant is written in .xml format.
@@ -79,6 +83,8 @@ After runing this script, you should expect to generate the following files in f
 - gen.vec.npy, restaurant_emb.vec.npy (prepared embedding for words in word_idx)
 - restaurantTrain.npz, restaurantTest.npz (prepared training/text dataset extracted from the .xml files)
 - other .json files (raw text/opinions from the .xml files)
+
+These files are included in this repo, so if you wish to jump directly to training, you can skip this step.
 
 ### Step 7:
 Run script/Step2_train.py to train the restaurant model.
@@ -97,6 +103,8 @@ Here is a list of key arguments that can be tuned by user:
 - --crf: bool (whether to use conditional random field)
 - --PoStag: bool (whether to include part-of-speech tag)
 - --runs: int (default=5, generate 5 model files)
+
+A pre-trained model is included in model/restaurant0, so if you wish to jump directly to evaluate your review text, you can skip this step.
 
 ### Step 8:
 
