@@ -11,7 +11,7 @@ For now it works pretty well on restaurant reviews, but you can train your own d
 ## Models
 This code is based on this paper "Double Embeddings and CNN-based Sequence Labeling for Aspect Extraction" by Xu, H., Liu, B., Shu, L., & Yu, P. S. (2018). 
 
-Its original code can be found in [GitHub](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction).
+Its original code can be found in [GitHub/howardhsu/](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction).
 
 Here "triple embeddings" refer to: 
 1. General-purpose GloVe embeddings 
@@ -29,7 +29,7 @@ Required Python modules: numpy, PyTorch (with or without CUDA), Keras, nltk, etc
 Download general embeddings (GloVe: http://nlp.stanford.edu/data/glove.840B.300d.zip ). Rename it as "gen.vec" and save it in folder: data/embedding/
 
 #### Step 2: 
-Download restaurant domain embeddings (You can find the link under this paper's title in https://www.cs.uic.edu/~hxu/ ), save them in folder: data/embedding
+Download restaurant domain embeddings (You can find the link under this paper's title in https://www.cs.uic.edu/~hxu/ ), save them in folder: data/embedding/
 
 The list of files in this folder are:
 - gen.vec
@@ -112,5 +112,6 @@ In folder "demo/" there is a file containing a few yelp reviews extracted from t
 python3 script/Step3_evaluation_from_input.py --demo_fn 'Yelp_review_short.txt'
 ~~~
 
-You can view the aspect extraction from your review:
+You can view the aspect extracted (text in color) from your review in the terminal:
+
 ![](result.png)
