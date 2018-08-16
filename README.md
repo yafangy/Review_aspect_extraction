@@ -96,6 +96,7 @@ Here is a list of key arguments that can be tuned by user:
 - --dropout: double (dropout rate)
 - --crf: bool (whether to use conditional random field)
 - --PoStag: bool (whether to include part-of-speech tag)
+- --runs: int (default=5, generate 5 model files)
 
 ### Step 8:
 
@@ -109,9 +110,10 @@ This code is for demo purpose. It will ask you to either input your own restaura
 
 In folder "demo/" there is a file containing a few yelp reviews extracted from the kaggle dataset ([Yelp Dataset | Kaggle](https://www.kaggle.com/yelp-dataset/yelp-dataset#yelp_academic_dataset_review.json)). You are welcome to type in any reviews that you are interested in.
 ~~~
-python3 script/Step3_evaluation_from_input.py --demo_fn 'Yelp_review_short.txt'
+python3 script/Step3_evaluation_from_input.py --demo_fn 'Yelp_review_short.txt' --runs 1
 ~~~
 
-You can view the aspect extracted (text in color) from your review in the terminal:
+"--runs" is set to 1 because I only uploaded one model file here.
+Please wait a few seconds for preparing the text embeddings. You can then view the aspect extracted (text in color) from your review in the terminal:
 
 ![](result.png)
