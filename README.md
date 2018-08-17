@@ -1,6 +1,10 @@
 # Triple Embeddings and CNN-based Sequence Labeling for Aspect Extraction and Sentiment Analysis
 
 ## Introduction
+
+![](aspect.png)
+
+Here is an example of aspect based sentiment analysis.
 One import task of fine-grained sentiment analysis of reviews is to extract aspects or features that users have expressed opinions on.
 
 This model utilizes two types of pre-trained embeddings and part-of-speech tagger + CNN model for aspect extraction.
@@ -10,6 +14,8 @@ For now it works pretty well on restaurant reviews, but you can train your own d
 
 ## Models
 This code is based on this paper "Double Embeddings and CNN-based Sequence Labeling for Aspect Extraction" by Xu, H., Liu, B., Shu, L., & Yu, P. S. (2018). 
+
+![](image2.png)
 
 Its original code can be found in [GitHub/howardhsu/](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction).
 
