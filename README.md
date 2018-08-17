@@ -2,7 +2,7 @@
 
 ## Introduction
 
-![](aspect.png)
+<img src="aspect.png" alt="drawing" width="550px"/>
 
 Here is an example of aspect based sentiment analysis.
 One import task of fine-grained sentiment analysis of reviews is to extract aspects or features that users have expressed opinions on.
@@ -15,7 +15,7 @@ For now it works pretty well on restaurant reviews, but you can train your own d
 ## Models
 This code is based on this paper "Double Embeddings and CNN-based Sequence Labeling for Aspect Extraction" by Xu, H., Liu, B., Shu, L., & Yu, P. S. (2018). 
 
-![](image2.png)
+<img src="image2.png" alt="drawing" width="550px"/>
 
 Its original code can be found in [GitHub/howardhsu/](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction).
 
