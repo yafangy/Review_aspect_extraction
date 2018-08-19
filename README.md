@@ -98,10 +98,7 @@ Run script/Step2_train.py to train the restaurant model.
 ~~~
 python3 script/Step2_train.py
 ~~~
-You can turn off part-of-speech tags in the model:
-~~~
-python3 script/Step2_train.py --PoStag False
-~~~
+
 Here is a list of key arguments that can be tuned by user:
 - --valid: int (define data size for validation)
 - --epochs: int (number of epochs)
@@ -125,10 +122,10 @@ This code is for demo purpose. It will ask you to either input your own restaura
 
 In folder "demo/" there is a file containing a few yelp reviews extracted from the kaggle dataset ([Yelp Dataset | Kaggle](https://www.kaggle.com/yelp-dataset/yelp-dataset#yelp_academic_dataset_review.json)). You are welcome to type in any reviews that you are interested in.
 ~~~
-python3 script/Step3_evaluation_from_input.py --demo_fn 'Yelp_review_short.txt' --runs 1
+python3 script/Step3_evaluation_from_input.py --demo_fn 'test.txt' --runs 2
 ~~~
 
-"--runs" is set to 1 because I only uploaded one model file here.
+"--runs" is set to 2 because I only uploaded model with 2 runs here.
 Please wait a few seconds for preparing the text embeddings. You can then view the aspect extracted (text in color) from your review in the terminal:
 
 ![](image3_v2.png)
