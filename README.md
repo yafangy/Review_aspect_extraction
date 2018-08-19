@@ -114,12 +114,6 @@ A pre-trained model is included in model/restaurant0, so if you wish to jump dir
 
 You can then evaluate your model with codes provided in [GitHub - howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction). This is for test purpose and you will generate a "pred.xml" in "data/offical_data" folder. To test the accuracy of your model, you need to download the official evaluation script from SemEval 2016 Restaurant (http://alt.qcri.org/semeval2016/task5/), and save it to script/A.jar
 
-If you wish to test on any reviews you are interested, run my code: script/Step3_evaluate.py
-~~~
-python3 script/Step3_evaluate.py
-~~~
-This code is for demo purpose. It will ask you to either input your own restaurant reviews or input the name of text file that contains restaurant reviews.
-
 In folder "demo/" there is a file containing a few yelp reviews extracted from the kaggle dataset ([Yelp Dataset | Kaggle](https://www.kaggle.com/yelp-dataset/yelp-dataset#yelp_academic_dataset_review.json)). You are welcome to type in any reviews that you are interested in.
 ~~~
 python3 script/Step3_evaluation_from_input.py --demo_fn 'test.txt' --runs 2
