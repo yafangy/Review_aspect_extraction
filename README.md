@@ -23,7 +23,7 @@ The two embeddings are:
 1. General-purpose GloVe embeddings 
 2. Domain-specific embeddings (can be created using gensim-word2vec)
 
-In my "triple embeddings" model, in the last layer, feature maps concatenated with domain embeddings of the word as well as its Part-Of-Speech tagger is feeded to the fully-connected layer.
+In my "triple embeddings" model, in the last layer, feature maps concatenated with domain embeddings of the word as well as its part-of-speech tagger (stanford) is feeded to the fully-connected layer.
 
 <img src="image2_2.png" alt="drawing" width="550px"/>
 
