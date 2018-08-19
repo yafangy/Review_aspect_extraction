@@ -2,7 +2,7 @@
 
 ## Introduction
 
-<img src="aspect.png" alt="drawing" width="550px"/>
+<img src="image1_v1.png" alt="drawing" width="550px"/>
 
 Here is an example of aspect based sentiment analysis.
 One import task of fine-grained sentiment analysis of reviews is to extract aspects or features that users have expressed opinions on.
@@ -17,14 +17,15 @@ This code is based on this paper "Double Embeddings and CNN-based Sequence Label
 
 <img src="image2.png" alt="drawing" width="550px"/>
 
-Its original code can be found in [GitHub/howardhsu/](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction).
+Its original code can be found in [GitHub/howardhsu/](https://github.com/howardhsu/Double-Embeddings-and-CNN-based-Sequence-Labeling-for-Aspect-Extraction) and the illustration of the model is shown above.
 
-Here "triple embeddings" refer to: 
+The two embeddings are:
 1. General-purpose GloVe embeddings 
 2. Domain-specific embeddings (can be created using gensim-word2vec)
-3. Stanford Log-linear Part-Of-Speech Tagger.
 
-The third embedding is introduced here and added to the original model.  
+In my "triple embeddings" model, in the last layer, feature maps concatenated with domain embeddings of the word as well as its Part-Of-Speech tagger is feeded to the fully-connected layer.
+
+<img src="image2_2.png" alt="drawing" width="550px"/>
 
 
 ## How to use the code
@@ -130,4 +131,4 @@ python3 script/Step3_evaluation_from_input.py --demo_fn 'Yelp_review_short.txt' 
 "--runs" is set to 1 because I only uploaded one model file here.
 Please wait a few seconds for preparing the text embeddings. You can then view the aspect extracted (text in color) from your review in the terminal:
 
-![](result.png)
+![](image3_v2.png)

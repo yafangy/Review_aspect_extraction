@@ -23,24 +23,22 @@ class Model(torch.nn.Module):
         self.domain_embedding = torch.nn.Embedding(domain_emb.shape[0], domain_emb.shape[1])
         self.domain_embedding.weight=torch.nn.Parameter(torch.from_numpy(domain_emb), requires_grad=False)
     
-        self.conv1=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1]+self.tag_dim, 128, 5, padding=2 )
-        self.conv2=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1]+self.tag_dim, 128, 3, padding=1 )
+        self.conv1=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1], 128, 5, padding=2 )
+        self.conv2=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1], 128, 3, padding=1 )
         self.dropout=torch.nn.Dropout(dropout)
 
         self.conv3=torch.nn.Conv1d(256, 256, 5, padding=2)
         self.conv4=torch.nn.Conv1d(256, 256, 5, padding=2)
         self.conv5=torch.nn.Conv1d(256, 256, 5, padding=2)
-        self.linear_ae=torch.nn.Linear(256, num_classes)
+        self.linear_ae1=torch.nn.Linear(256+self.tag_dim+domain_emb.shape[1], 50)
+        self.linear_ae2=torch.nn.Linear(50, num_classes)
         self.crf_flag=crf
         if self.crf_flag:
             from allennlp.modules import ConditionalRandomField
             self.crf=ConditionalRandomField(num_classes)            
           
     def forward(self, x, x_len, x_mask, x_tag, y=None, testing=False):
-        if self.tag_dim == 0:
-            x_emb=torch.cat((self.gen_embedding(x), self.domain_embedding(x) ), dim=2)  # shape = [batch_size (128), sentence length (83), embedding output size (300+100+tag_num)]     
-        else:
-            x_emb=torch.cat((self.gen_embedding(x), self.domain_embedding(x), x_tag ), dim=2)
+        x_emb=torch.cat((self.gen_embedding(x), self.domain_embedding(x) ), dim=2)  # shape = [batch_size (128), sentence length (83), embedding output size (300+100)]       
         x_emb=self.dropout(x_emb).transpose(1, 2)  # shape = [batch_size (128), embedding output size (300+100+tag_num) , sentence length (83)]
         x_conv=torch.nn.functional.relu(torch.cat((self.conv1(x_emb), self.conv2(x_emb)), dim=1) )  # shape = [batch_size, 128+128, 83]
         x_conv=self.dropout(x_conv)
@@ -50,7 +48,8 @@ class Model(torch.nn.Module):
         x_conv=self.dropout(x_conv)
         x_conv=torch.nn.functional.relu(self.conv5(x_conv) )
         x_conv=x_conv.transpose(1, 2) # shape = [batch_size, 83, 256]
-        x_logit=self.linear_ae(x_conv) # shape = [batch_size, 83, num_classes]
+        x_logit=torch.nn.functional.relu(self.linear_ae1(torch.cat((x_conv, x_tag, self.domain_embedding(x)), dim=2) ) ) # shape = [batch_size, 83, 20]
+        x_logit=self.linear_ae2(x_logit)
         if testing:
             if self.crf_flag:
                 score=self.crf.viterbi_tags(x_logit, x_mask)
@@ -64,7 +63,7 @@ class Model(torch.nn.Module):
                 x_logit=torch.nn.utils.rnn.pack_padded_sequence(x_logit, x_len, batch_first=True)
                 score=torch.nn.functional.nll_loss(torch.nn.functional.log_softmax(x_logit.data), y.data)
         return score
-
+    
 # This is for color the output text
 class bcolors:
     ONGREEN = '\x1b[6;30;42m'
@@ -194,7 +193,7 @@ def output_text(fn, pred_y, out_fn=None):
                     if pred_y[count, wx] == 1:
                         print(bcolors.ONGREEN + word + bcolors.END, end=" ")
                     elif pred_y[count, wx] == 2:
-                        print(bcolors.ONYELLOW + word + bcolors.END, end=" ")
+                        print(bcolors.ONGREEN + word + bcolors.END, end=" ")
                     else:
                         print(word, end=" ")
                 print('\n')

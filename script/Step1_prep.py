@@ -113,8 +113,9 @@ def create_train_data_restaurant(fn, word_idx_fn, out_dir, POSdir, domain, str_n
             target, category, polarity, start, end = opin.attrib['target'], opin.attrib['category'], opin.attrib['polarity'], int(opin.attrib['from']), int(opin.attrib['to'])
             catag_main, catag_sub = category.split('#')
             # find word index (instead of str index) if start,end is not (0,0)
-            if start and end:
-                start = len(word_tokenize(text[:start]))
+            if end != 0:
+                if start != 0:
+                    start = len(word_tokenize(text[:start]))
                 end = len(word_tokenize(text[:end]))-1
                 # for training only identify aspect word, but not polarity
                 train_y[sx, start] = 1

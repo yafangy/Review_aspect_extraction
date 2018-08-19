@@ -15,6 +15,7 @@ torch.manual_seed(1337)
 if CUDA:
     torch.cuda.manual_seed(1337)
 
+
 def batch_generator(X, y, X_tag, batch_size=128, return_idx=False, CUDA=False, crf=False, tag=False):
     for offset in range(0, X.shape[0], batch_size):
         # Count sentence length (none zero element in each row of X)
@@ -32,7 +33,7 @@ def batch_generator(X, y, X_tag, batch_size=128, return_idx=False, CUDA=False, c
         else:
             batch_X = torch.autograd.Variable(torch.from_numpy(batch_X).long() )
             batch_X_mask=torch.autograd.Variable(torch.from_numpy(batch_X_mask).long() )
-            batch_y = torch.autograd.Variable(torch.from_numpy(batch_y).long() )
+            batch_y = torch.autograd.Variable(torch.from_numpy(batch_y).long() )        
         if tag:
             batch_X_tag = X_tag[offset:offset+batch_size][batch_idx]
             batch_X_tag_onehot = to_categorical(batch_X_tag, num_classes=45+1)[:,:,1:]
@@ -61,24 +62,22 @@ class Model(torch.nn.Module):
         self.domain_embedding = torch.nn.Embedding(domain_emb.shape[0], domain_emb.shape[1])
         self.domain_embedding.weight=torch.nn.Parameter(torch.from_numpy(domain_emb), requires_grad=False)
     
-        self.conv1=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1]+self.tag_dim, 128, 5, padding=2 )
-        self.conv2=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1]+self.tag_dim, 128, 3, padding=1 )
+        self.conv1=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1], 128, 5, padding=2 )
+        self.conv2=torch.nn.Conv1d(gen_emb.shape[1]+domain_emb.shape[1], 128, 3, padding=1 )
         self.dropout=torch.nn.Dropout(dropout)
 
         self.conv3=torch.nn.Conv1d(256, 256, 5, padding=2)
         self.conv4=torch.nn.Conv1d(256, 256, 5, padding=2)
         self.conv5=torch.nn.Conv1d(256, 256, 5, padding=2)
-        self.linear_ae=torch.nn.Linear(256, num_classes)
+        self.linear_ae1=torch.nn.Linear(256+self.tag_dim+domain_emb.shape[1], 50)
+        self.linear_ae2=torch.nn.Linear(50, num_classes)
         self.crf_flag=crf
         if self.crf_flag:
             from allennlp.modules import ConditionalRandomField
             self.crf=ConditionalRandomField(num_classes)            
           
     def forward(self, x, x_len, x_mask, x_tag, y=None, testing=False):
-        if self.tag_dim == 0:
-            x_emb=torch.cat((self.gen_embedding(x), self.domain_embedding(x) ), dim=2)  # shape = [batch_size (128), sentence length (83), embedding output size (300+100+tag_num)]     
-        else:
-            x_emb=torch.cat((self.gen_embedding(x), self.domain_embedding(x), x_tag ), dim=2)
+        x_emb=torch.cat((self.gen_embedding(x), self.domain_embedding(x) ), dim=2)  # shape = [batch_size (128), sentence length (83), embedding output size (300+100)]       
         x_emb=self.dropout(x_emb).transpose(1, 2)  # shape = [batch_size (128), embedding output size (300+100+tag_num) , sentence length (83)]
         x_conv=torch.nn.functional.relu(torch.cat((self.conv1(x_emb), self.conv2(x_emb)), dim=1) )  # shape = [batch_size, 128+128, 83]
         x_conv=self.dropout(x_conv)
@@ -88,7 +87,8 @@ class Model(torch.nn.Module):
         x_conv=self.dropout(x_conv)
         x_conv=torch.nn.functional.relu(self.conv5(x_conv) )
         x_conv=x_conv.transpose(1, 2) # shape = [batch_size, 83, 256]
-        x_logit=self.linear_ae(x_conv) # shape = [batch_size, 83, num_classes]
+        x_logit=torch.nn.functional.relu(self.linear_ae1(torch.cat((x_conv, x_tag, self.domain_embedding(x)), dim=2) ) ) # shape = [batch_size, 83, 20]
+        x_logit=self.linear_ae2(x_logit)
         if testing:
             if self.crf_flag:
                 score=self.crf.viterbi_tags(x_logit, x_mask)
@@ -181,7 +181,7 @@ def run(domain, data_dir, model_dir, valid_split, runs, epochs, lr, dropout, CUD
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_dir', type=str, default="model/")
 parser.add_argument('--batch_size', type=int, default=128)
-parser.add_argument('--epochs', type=int, default=150) 
+parser.add_argument('--epochs', type=int, default=200) 
 parser.add_argument('--runs', type=int, default=5)
 parser.add_argument('--domain', type=str, default="restaurant")
 parser.add_argument('--data_dir', type=str, default="data/prep_data/")
