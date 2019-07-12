@@ -62,7 +62,7 @@ Now you should be able to `import fastText` in Python codes.
 This is for embedding out-of-vocabulary words (words not in domain-specific embeddings).
 
 ### Step 4:
-Download Stanford Log-linear Part-Of-Speech Tagger from [The Stanford Natural Language Processing Group](https://nlp.stanford.edu/software/tagger.shtml) to folder and rename it as: stanford-postagger-full/
+Download Stanford Log-linear Part-Of-Speech Tagger from [The Stanford Natural Language Processing Group](https://nlp.stanford.edu/software/tagger.shtml) to folder and rename it as: stanford-posttagger-full/
 
 ### Step 5:
 You can skip this step. The dataset is included.
